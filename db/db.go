@@ -21,6 +21,7 @@ func InitDB() {
 		createTables()
 }
 
+// 這是一個初始化用的函式，通常只在程式啟動時呼叫一次
 func createTables() {
 	createEventsTable := `
 		CREATE TABLE IF NOT EXISTS events (
