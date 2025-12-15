@@ -43,6 +43,48 @@ func (e *Event) Save() error {
 	return err
 }
 
-func GetAllEvents() []Event {
-	return events
+// 從 events 資料表把每一列撈出來 → 
+// 轉成 Event struct → 
+// 收集成 slice 回傳
+func GetAllEvents() ([]Event, error) {
+	query := "SELECT * FROM events"
+
+	// rows：一個「游標」，一列一列讀
+	rows, err := db.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	// 宣告一個「裝 Event 的盒子列隊」
+	// 因為 Scan 每一列都要有一個暫存容器
+	var events []Event
+
+	// 迴圈來讀取每一行資料
+	for rows.Next() {
+		var event Event // 幫我生一個 全新的 Event 變數
+		
+		// 資料庫這一列的每一個欄位，
+		// 請你直接寫進這個 event 裡對應的欄位。
+		// Scan 要的是「位址」
+		if err := rows.Scan(
+			&event.ID,
+			&event.Name,
+			&event.Description,
+			&event.Location,
+			&event.DateTime,
+			&event.UserId,
+		); err != nil {
+			return nil, err
+		}
+		// 把 目前這個 event 的「值」 複製一份，
+		// 放進 events 這個 slice 裡。
+		events = append(events, event)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return events, nil
 }

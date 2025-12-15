@@ -19,7 +19,10 @@ func main() {
 }
 
 func getEvents(context *gin.Context) {
-	events := models.GetAllEvents()
+	events, err := models.GetAllEvents()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法找到event"})
+	}
 	context.JSON(http.StatusOK, events)
 }
 
@@ -31,14 +34,19 @@ func createEvents(context *gin.Context) {
 	err := context.ShouldBindJSON(&event)
 
 	if err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"message": "無法處理請求"})
+		context.JSON(http.StatusBadRequest, gin.H{"message": "無法處理 event"})
 		return
 	}
 
 	event.ID = 1
 	event.UserId = 1
 
-	event.Save()
+	err = event.Save()
+
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "無法創造 event"})
+		return
+	}
 
 	context.JSON(http.StatusCreated, gin.H{"message": "事件被創造", "event": event})
 }
