@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"strconv"
 
 	"example.com/golang-api-project1/db"
 	"example.com/golang-api-project1/models"
@@ -13,11 +14,13 @@ func main() {
 	server := gin.Default()
 
 	server.GET("/events", getEvents)
+	server.GET("/events/:id", getEvent)
 	server.POST("/events", createEvents)
 
 	server.Run(":8080") // localhost:8080
 }
 
+// 取得所有活動
 func getEvents(context *gin.Context) {
 	events, err := models.GetAllEvents()
 	if err != nil {
@@ -26,6 +29,24 @@ func getEvents(context *gin.Context) {
 	context.JSON(http.StatusOK, events)
 }
 
+// 取得 ID
+func getEvent(context *gin.Context) {
+	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "無法取得 ID"})
+		return
+	}
+
+	event ,err := models.GetEventByID(eventId)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "無法取得 event"})
+		return
+	}
+
+	context.JSON(http.StatusOK, event)
+}
+
+// 創造活動
 func createEvents(context *gin.Context) {
 	var event models.Event
 
