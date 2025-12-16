@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	db.InitDB()
-	server := gin.Default()
+	db.InitDB() // 建立資料庫連線
+	server := gin.Default() // 建立一個 Gin Engine
 
-	routes.RegisterRoutes(server)
+	routes.RegisterRoutes(server) // 把 URL 跟 handler function 綁在一起
 
 	server.Run(":8080") // localhost:8080
 }

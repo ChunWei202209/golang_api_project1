@@ -1,34 +1,50 @@
 package models
 
+// Models：
+// 跟資料庫溝通，存資料、拿資料、更新資料。
+
+// 做三件事：
+// 1️⃣ 定義資料長什麼樣（struct）。
+// 2️⃣ 定義資料怎麼進 DB（Save / Update）。
+// 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID）。
+
+// 一句話結論（給新手用的版本）
+// 有 SELECT → 一定要 Scan
+// 沒有 SELECT → 用 Exec，不 Scan
+// Scan = 把 DB 的欄位值寫進 Go 變數
+
 import (
 	"time"
 
 	"example.com/golang-api-project1/db"
 )
 
+// 資料的藍圖
 type Event struct {
-	ID 					int64
-	Name 				string `binding:"required"`
+	ID 					int64  `json:"id"`
+	Name 				string `binding:"required"` // 「前端送 JSON 時，這個欄位一定要有」
 	Description string `binding:"required"`
 	Location 		string `binding:"required"`
 	DateTime 		time.Time `binding:"required"`
 	UserId 			int
 }
 
-var events = []Event{}
-
+// 把 Event 存進資料庫，使用指標來修改 ID
 func (e *Event) Save() error {
-	// 避免 SQL Injection
+
+	// 使用 ?，避免 SQL Injection
 	query := `
 		INSERT INTO events(name, description, location, dateTime, user_id) 
 		VALUES (?, ?, ?, ?, ?)
 	`
+	// Prepare：先把 SQL 準備好
 	stmt, err := db.DB.Prepare(query)
 
 	if err != nil {
 		return err
 	}
 
+	// 「這個 function 結束時，幫我把 stmt 關掉」避免資源外洩。
 	defer stmt.Close()
 
 	// 真的執行 INSERT
@@ -37,16 +53,18 @@ func (e *Event) Save() error {
 		return err
 	}
 
-	// 自動產生 id
+	// 拿回自動產生的 ID
 	id, err := result.LastInsertId()
 	e.ID = id
 	return err
 }
 
-// 從 events 資料表把每一列撈出來 → 
-// 轉成 Event struct → 
-// 收集成 slice 回傳
+// 取得所有資料
 func GetAllEvents() ([]Event, error) {
+
+	// 從 events 資料表把每一列撈出來 → 
+	// 轉成 Event struct → 
+	// 收集成 slice 回傳
 	query := "SELECT * FROM events"
 
 	// rows：一個「游標」，一列一列讀
@@ -109,4 +127,29 @@ func GetEventByID(id int64) (*Event, error) {
 		}
 
 		return &event, nil
+}
+
+// 更新既有資料
+func (event Event) Update() error {
+	query := `
+		UPDATE events
+		SET name = ?, description = ?, location = ?, dateTime = ?
+		WHERE id = ?
+	`
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(
+		event.Name, 
+		event.Description,
+		event.Location, 
+		event.DateTime, 
+		event.ID,
+	)
+	return err
 }
