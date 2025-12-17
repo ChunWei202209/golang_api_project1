@@ -1,6 +1,12 @@
 package models
 
-import "example.com/golang-api-project1/db"
+import (
+	"errors"
+	"fmt"
+
+	"example.com/golang-api-project1/db"
+	"example.com/golang-api-project1/utils"
+)
 
 // Models：
 // 跟資料庫溝通，存資料、拿資料、更新資料。
@@ -32,7 +38,15 @@ func (u *User) Save() error {
 	// 「這個 function 結束時，幫我把 stmt 關掉」避免資源外洩。
 	defer stmt.Close()
 
-	result, err := stmt.Exec(u.Email, u.Password)
+	// 把密碼加密
+	hashedPassword, err := utils.HashPassword(u.Password)
+
+	if err != nil {
+		return err
+	}
+
+	result, err := stmt.Exec(u.Email, hashedPassword)
+
 	if err != nil {
 		return err
 	}
@@ -40,4 +54,32 @@ func (u *User) Save() error {
 	userId, err := result.LastInsertId()
 	u.ID = userId
 	return err
+}
+
+func (u User) ValidateCredentials() error {
+	query := "SELECT password FROM users WHERE email = ?"
+	row := db.DB.QueryRow(query, u.Email)
+
+	var retrievedPassword string
+	err := row.Scan(&retrievedPassword)
+
+	if err != nil {
+		fmt.Println("DB scan error:", err)
+		return errors.New("credentials invalid")
+	}
+
+	// 印出拿到的 hash 與使用者輸入
+	fmt.Println("Input password:", u.Password)
+	fmt.Println("Retrieved hash:", retrievedPassword)
+	
+	// 因為密碼被加密了，所以要解密才能比較
+	passwordIsValid := utils.CheckPasswordHash(u.Password, retrievedPassword)
+
+	// 密碼不同
+	if !passwordIsValid {
+		fmt.Println("Password mismatch")
+		return errors.New("credentials invalid")
+	}
+
+	return nil
 }
