@@ -121,3 +121,28 @@ func updateEvent(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "成功更新 event"})
 
 }
+
+func deleteEvent(context *gin.Context) {
+	// 先檢查 ID 存不存在
+	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "無法取得 ID"})
+		return
+	}
+
+	// 取得 ID
+	event, err := models.GetEventByID(eventId)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法更新 event"})
+		return
+	}
+
+	err = event.Delete()
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法刪除 event"})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "成功刪除 event"})
+}

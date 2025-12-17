@@ -48,7 +48,12 @@ func (e *Event) Save() error {
 	defer stmt.Close()
 
 	// 真的執行 INSERT
-	result, err := stmt.Exec(e.Name, e.Description, e.Location, e.DateTime, e.UserId)
+	result, err := stmt.Exec(
+		e.Name, 
+		e.Description, 
+		e.Location, 
+		e.DateTime, 
+		e.UserId)
 	if err != nil {
 		return err
 	}
@@ -129,7 +134,7 @@ func GetEventByID(id int64) (*Event, error) {
 		return &event, nil
 }
 
-// 更新既有資料
+// 更新 - 👉 改「內容」 → struct 是內容集合
 func (event Event) Update() error {
 	query := `
 		UPDATE events
@@ -151,5 +156,20 @@ func (event Event) Update() error {
 		event.DateTime, 
 		event.ID,
 	)
+	return err
+}
+
+// 刪除 - 👉 刪「存在本身」 → ID 就夠了
+func (event Event) Delete() error {
+	query := "DELETE FROM events WHERE id = ?"
+	stmt, err := db.DB.Prepare(query)
+
+	if err != nil {
+		return err
+	}
+
+	defer stmt.Close()
+
+	_, err = stmt.Exec(event.ID)
 	return err
 }
