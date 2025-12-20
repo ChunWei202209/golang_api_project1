@@ -16,7 +16,6 @@ import (
 	"strconv"
 
 	"example.com/golang-api-project1/models"
-	"example.com/golang-api-project1/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -52,36 +51,19 @@ func getEvent(context *gin.Context) {
 // 需要權限才能使用，所以需要加入驗證 token
 func createEvents(context *gin.Context) {
 
-	// 驗證
-	token := context.Request.Header.Get("Authorization")
-
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "沒有權限"})
-		return
-	}
-
-	userId, err := utils.VerifyToken(token)
-
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "沒有權限"})
-		return
-	}
-
-	// 驗證成功就繼續執行之後的程式碼
-
 	// 宣告一個「空的 Event 容器」，型別是 models.Event，也就是 struct，
 	// 預設欄位都是 空 或 0
 	var event models.Event
 
 	// ShouldBindJSON: 把 request body 的 JSON 轉成 Go 的 struct
 	// 如果轉換失敗，就把錯誤存進 err
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "無法處理 event"})
 		return
 	}
-
+	userId := context.GetInt64("userId")
 	event.UserID = userId
 
 	// 傳給 model 層存資料

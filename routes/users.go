@@ -46,6 +46,7 @@ func login(context *gin.Context) {
 		return
 	}
 
+	// 驗整使用者
 	err = user.ValidateCredentials()
 
 	if err != nil {
