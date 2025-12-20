@@ -2,7 +2,9 @@ package routes
 
 import (
 	"net/http"
+
 	"example.com/golang-api-project1/models"
+	"example.com/golang-api-project1/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -52,5 +54,14 @@ func login(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, gin.H{"message": "認證成功!"})
+	// 呼叫 JWT
+	token, err := utils.GenerateToken(user.Email, user.ID)
+
+	if err != nil {
+		println("GenerateToken error:", err.Error())
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法認證使用者!"})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{"message": "登陸成功!", "token": token})
 }
