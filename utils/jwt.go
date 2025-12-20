@@ -2,6 +2,7 @@ package utils
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -12,6 +13,7 @@ const secretKey = "supersecret"
 // 1️⃣ 建立一張「還沒蓋章的身分證」
 // 回傳 token 還有可能失敗的 error
 func GenerateToken(email string, userId int64) (string, error) {
+	fmt.Println(userId)
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"email": email,
 		"userId": userId,
@@ -23,7 +25,7 @@ func GenerateToken(email string, userId int64) (string, error) {
 }
 
 // VerifyToken 用來驗證傳入的 JWT token 是否有效
-func VerifyToken(token string) error {
+func VerifyToken(token string) (int64, error) {
 	// jwt.Parse 會解析傳入的 token 並驗證簽名
 	parsedToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
@@ -36,24 +38,24 @@ func VerifyToken(token string) error {
 	})
 
 	if err != nil {
-		return errors.New("無法處理 token")
+		return 0, errors.New("無法處理 token")
 	}
 	
 	// 檢查 token 是否有效（簽名正確且未過期）
 	tokenIsValid := parsedToken.Valid
 
 	if !tokenIsValid {
-		return errors.New("無效的 token")
+		return 0, errors.New("無效的 token")
 	}
 
-	// claims, ok := parsedToken.Claims.(jtw.MapClaims)
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 
-	// if !ok {
-	// 	return errors.New("無效的 token claims")
-	// }
+	if !ok {
+		return 0, errors.New("無效的 token claims")
+	}
 
 	// email := claims["email"].(string)
-	// userId := claims["userId"].(int64)
+	userId := int64(claims["userId"].(float64))
 
-	return nil
+	return userId, nil
 }

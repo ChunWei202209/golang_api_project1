@@ -60,7 +60,7 @@ func createEvents(context *gin.Context) {
 		return
 	}
 
-	err := utils.VerifyToken(token)
+	userId, err := utils.VerifyToken(token)
 
 	if err != nil {
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "沒有權限"})
@@ -82,8 +82,7 @@ func createEvents(context *gin.Context) {
 		return
 	}
 
-	event.ID = 1
-	event.UserId = 1
+	event.UserID = userId
 
 	// 傳給 model 層存資料
 	err = event.Save()

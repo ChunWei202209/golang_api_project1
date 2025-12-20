@@ -26,7 +26,7 @@ type Event struct {
 	Description string `binding:"required"`
 	Location 		string `binding:"required"`
 	DateTime 		time.Time `binding:"required"`
-	UserId 			int
+	UserID 			int64
 }
 
 // 把 Event 存進資料庫，使用指標來修改 ID
@@ -53,7 +53,7 @@ func (e *Event) Save() error {
 		e.Description, 
 		e.Location, 
 		e.DateTime, 
-		e.UserId)
+		e.UserID)
 	if err != nil {
 		return err
 	}
@@ -96,7 +96,7 @@ func GetAllEvents() ([]Event, error) {
 			&event.Description,
 			&event.Location,
 			&event.DateTime,
-			&event.UserId,
+			&event.UserID,
 		); err != nil {
 			return nil, err
 		}
@@ -124,7 +124,7 @@ func GetEventByID(id int64) (*Event, error) {
 			&event.Description,
 			&event.Location,
 			&event.DateTime,
-			&event.UserId,
+			&event.UserID,
 		) 
 		
 		if err != nil {
