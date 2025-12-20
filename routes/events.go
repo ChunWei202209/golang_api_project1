@@ -89,10 +89,18 @@ func updateEvent(context *gin.Context) {
 	}
 
 	// 取得 ID
-	_, err = models.GetEventByID(eventId)
+	// 因為只有使用者才能編輯活動，所以要驗證 ID 是不是相同
+	userId := context.GetInt64("userId")
+	event, err := models.GetEventByID(eventId)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法取得 event"})
+		return
+	}
+
+	// 若 ID 不符合
+	if event.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "沒有權限去更新 event"})
 		return
 	}
 
@@ -122,6 +130,7 @@ func updateEvent(context *gin.Context) {
 
 }
 
+// 刪除
 func deleteEvent(context *gin.Context) {
 	// 先檢查 ID 存不存在
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 
@@ -131,10 +140,18 @@ func deleteEvent(context *gin.Context) {
 	}
 
 	// 取得 ID
+	userId := context.GetInt64("userId")
 	event, err := models.GetEventByID(eventId)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法更新 event"})
+		return
+	}
+
+	// 若 ID 不符合
+	// 因為只有使用者才能刪除活動，所以要驗證 ID 是不是相同
+	if event.UserID != userId {
+		context.JSON(http.StatusUnauthorized, gin.H{"message": "沒有權限去刪除 event"})
 		return
 	}
 
