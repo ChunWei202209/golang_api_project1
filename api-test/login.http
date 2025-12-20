@@ -1,5 +1,6 @@
 POST http://localhost:8080/login
 content-type: application/json
+authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhaXBlaUBleGFtcGxlLmNvbSIsImV4cCI6MTc2NjIxODM1MCwidXNlcklkIjoxfQ.ml-51M1EfirNDkPhm9Wkivc1dR9yoASD-be2KOaSoL0
 
 {
   "email": "taipei@example.com",
