@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  api-server:
+    build: .
+    container_name: my-gin-api
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_PATH=/root/data/api.db
+    volumes:
+      - ./data:/root/data
+    restart: always

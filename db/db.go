@@ -2,23 +2,31 @@ package db
 
 import (
   "database/sql"
+	"os"
   _ "github.com/glebarez/sqlite"
 )
 
 var DB *sql.DB
  
 func InitDB() {
-    var err error
-    DB, err = sql.Open("sqlite", "api.db")
- 
-    if err != nil {
-        panic("無法連到 DB 資料庫。")
-    }
-		
-    DB.SetMaxOpenConns(10) // 連線池同時的最高數量
-    DB.SetMaxIdleConns(5) // 持續開放的連線數目
+  // 2. 優先讀取環境變數 DB_PATH，如果沒設定，就用原本的 "api.db"
+	dbPath := os.Getenv("DB_PATH")
+	if dbPath == "" {
+		dbPath = "api.db"
+	}
 
-		createTables()
+	var err error
+	// 3. 使用 dbPath 代替寫死的檔案名稱
+	DB, err = sql.Open("sqlite", dbPath)
+
+	if err != nil {
+		panic("無法連到 DB 資料庫。" + err.Error())
+	}
+
+	DB.SetMaxOpenConns(10)
+	DB.SetMaxIdleConns(5)
+
+	createTables()
 }
 
 // 這是一個初始化用的函式，通常只在程式啟動時呼叫一次
