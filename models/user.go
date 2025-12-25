@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"example.com/golang-api-project1/db"
-	"example.com/golang-api-project1/utils"
+	"example.com/golang-api-project1/internal/db"
+	"example.com/golang-api-project1/internal/utils"
 )
 
 // Models：

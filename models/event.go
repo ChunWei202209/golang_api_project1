@@ -16,7 +16,7 @@ package models
 import (
 	"time"
 
-	"example.com/golang-api-project1/db"
+	"example.com/golang-api-project1/internal/db"
 )
 
 // 資料的藍圖

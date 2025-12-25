@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # 編譯程式 (關閉 CGO 以配合 glebarez/sqlite 的純 Go 特性)
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/api
 
 # 第二階段：執行 (Final)
 FROM alpine:latest
