@@ -3,6 +3,7 @@ package db
 import (
   "database/sql"
 	"os"
+	"example.com/golang-api-project1/logger"
   _ "github.com/glebarez/sqlite"
 )
 
@@ -16,10 +17,10 @@ func InitDB() {
 	}
 
 	var err error
-	// 3. 使用 dbPath 代替寫死的檔案名稱
 	DB, err = sql.Open("sqlite", dbPath)
 
 	if err != nil {
+		logger.Log.Fatal("無法連到 DB 資料庫", logger.ErrorField(err))
 		panic("無法連到 DB 資料庫。" + err.Error())
 	}
 
@@ -42,6 +43,7 @@ func createTables() {
 	_, err := DB.Exec(createUsersTable)
 
 	if err != nil {
+		logger.Log.Fatal("無法創造 users table", logger.ErrorField(err))
 		panic("無法創造 users table." + err.Error())
 	}
 
@@ -59,6 +61,7 @@ func createTables() {
 	_, err = DB.Exec(createEventsTable)
 
 	if err != nil {
+		logger.Log.Fatal("無法創造 events table", logger.ErrorField(err))
 		panic("無法創造 events table." + err.Error())
 	}
 
@@ -74,6 +77,7 @@ func createTables() {
 	_, err = DB.Exec(createRegistrationsTable)
 
 	if err != nil {
+		logger.Log.Fatal("無法創造 registrations table", logger.ErrorField(err))
 		panic("無法創造 registratinos table." + err.Error())
 	}
 }

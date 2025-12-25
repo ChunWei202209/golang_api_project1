@@ -16,6 +16,7 @@ import (
 	"strconv"
 
 	"example.com/golang-api-project1/models"
+	"example.com/golang-api-project1/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -158,6 +159,7 @@ func deleteEvent(context *gin.Context) {
 	err = event.Delete()
 
 	if err != nil {
+		logger.Log.Error("刪除活動失敗", logger.ErrorField(err))
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法刪除 event"})
 		return
 	}

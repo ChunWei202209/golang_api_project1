@@ -5,6 +5,7 @@ import (
 
 	"example.com/golang-api-project1/models"
 	"example.com/golang-api-project1/utils"
+	"example.com/golang-api-project1/logger"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,6 +25,7 @@ func signup(context *gin.Context) {
 	err = user.Save()
 
 	if err != nil {
+		logger.Log.Warn("註冊失敗", logger.StringField("email", user.Email), logger.ErrorField(err))
 		context.JSON(http.StatusBadRequest, gin.H{"message": "無法創造 user"})
 		return
 	}
@@ -50,19 +52,18 @@ func login(context *gin.Context) {
 	err = user.ValidateCredentials()
 
 	if err != nil {
-		println(err.Error())
+		logger.Log.Warn("登入失敗", logger.StringField("email", user.Email))
 		context.JSON(http.StatusUnauthorized, gin.H{"message": "無法認證使用者"})
 		return
 	}
 
-	// 呼叫 JWT
 	token, err := utils.GenerateToken(user.Email, user.ID)
 
 	if err != nil {
-		println("GenerateToken error:", err.Error())
+		logger.Log.Error("無法生成 token", logger.ErrorField(err))
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "無法認證使用者!"})
 		return
 	}
-
-	context.JSON(http.StatusOK, gin.H{"message": "登陸成功!", "token": token})
+	logger.Log.Info("用戶登入成功")
+	context.JSON(http.StatusOK, gin.H{"message": "用戶登入成功", "token": token})
 }

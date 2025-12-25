@@ -2,16 +2,21 @@ package main
 
 import (
 	"example.com/golang-api-project1/db"
+	"example.com/golang-api-project1/logger"
 	"example.com/golang-api-project1/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	db.InitDB() // 建立資料庫連線
-	server := gin.Default() // 建立一個 Gin Engine
+	logger.InitLogger(true)
+	defer logger.Sync()
 
-	routes.RegisterRoutes(server) // 把 URL 跟 handler function 綁在一起
+	db.InitDB()
+	server := gin.Default()
+	routes.RegisterRoutes(server)
 
-	server.Run(":8080") // localhost:8080
+	if err := server.Run(":8080"); err != nil {
+		logger.Log.Fatal("伺服器啟動失敗", logger.ErrorField(err))
+	}
 }
 
