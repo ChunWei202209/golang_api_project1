@@ -89,12 +89,10 @@ internal/    # 內部套件（db, logger, middleware 等）
 docs/        # Swagger 文檔（自動生成）
 ```
 
-## 常用指令
+## 📚 參考文件與學習資源
 
 **Uber-zap：**
-- [text](https://pjchender.dev/golang/pkg-zap/)
-- [text](https://betterstack.com/community/guides/logging/go/zap/)
+- [Zap 完整教學筆記 - PJCHENder 的繁體中文實戰指南](https://pjchender.dev/golang/pkg-zap/)
+- [Go Logging Guide with Zap - 深入探討 Zap 配置與最佳實務](https://betterstack.com/community/guides/logging/go/zap/)
 
-
-大概就這樣吧。
 
