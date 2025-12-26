@@ -100,10 +100,10 @@ docs/        # Swagger 文檔（自動生成）
 - [GO 使用Gin和Swagger設定自動產生文件檔案](https://hackmd.io/@fLqVWb1tQxmEVn9x8EpToQ/HyCV15w9T)
 - [下班加減學點Golang與Docker系列 第 27 篇](https://ithelp.ithome.com.tw/articles/10224472)
 
-### 快速整合四步驟
-1. 安裝工具：環境需安裝 swag 指令。
-2. 標註說明：在 main 和 controller 寫下該 API 的輸入與輸出規範。
-3. 生成文件：在終端機執行 swag init，這會自動產出一個 docs 資料夾。
-4. 掛載路由：在路由代碼中匯入 docs 套件，並設定 r.GET("/swagger/*any", ...) 讓瀏覽器能看到文件介面。
+**> 快速整合四步驟：**
+  1. 安裝工具：環境需安裝 swag 指令。
+  2. 標註說明：在 main 和 controller 寫下該 API 的輸入與輸出規範。
+  3. 生成文件：執行 swag init，這會自動產出一個 docs 資料夾。
+  4. 掛載路由：在路由代碼中匯入 docs 套件，並設定 r.GET("/swagger/*any", ...) 讓瀏覽器能看到文件介面。
 
 
