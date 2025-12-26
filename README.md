@@ -45,18 +45,12 @@ swag init -g cmd/api/main.go -o docs
 docker-compose up
 ```
 
-### 測試
-用 testify：
-```bash
-go test ./...
-```
-
 ## API 文檔
 
 啟動後到這裡看 Swagger：
 http://localhost:8080/swagger/index.html
 
-大部分 API 需要 token，先登錄拿到 token，然後在 Swagger 右上角點 Authorize，輸入 `Bearer <你的token>`。
+先登錄拿到 token，然後在 Swagger 右上角點 Authorize，輸入 `Bearer <你的token>`。
 
 ### API 列表
 
@@ -100,10 +94,12 @@ docs/        # Swagger 文檔（自動生成）
 - [GO 使用Gin和Swagger設定自動產生文件檔案](https://hackmd.io/@fLqVWb1tQxmEVn9x8EpToQ/HyCV15w9T)
 - [下班加減學點Golang與Docker系列 第 27 篇](https://ithelp.ithome.com.tw/articles/10224472)
 
-**快速整合四步驟：**
+#### 快速整合四步驟：
 1. 安裝工具：環境需安裝 swag 指令。
 2. 標註說明：在 main 和 controller 寫下該 API 的輸入與輸出規範。
 3. 生成文件：執行 swag init，這會自動產出一個 docs 資料夾。
 4. 掛載路由：在路由代碼中匯入 docs 套件，並設定 r.GET("/swagger/*any", ...) 讓瀏覽器能看到文件介面。
 
-
+## 未來優化計畫
+1. 增加單元測試
+2. 加入真正的資料庫
