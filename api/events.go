@@ -20,7 +20,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 取得所有活動
+// @Summary 取得所有活動
+// @Success 200 {array} models.Event
+// @Router /events [get]
 func getEvents(context *gin.Context) {
 	events, err := models.GetAllEvents()
 	if err != nil {
@@ -32,7 +34,10 @@ func getEvents(context *gin.Context) {
 	context.JSON(http.StatusOK, events)
 }
 
-// 依照 URL param 的 id 取得單一 event
+// @Summary 取得單一活動
+// @Param id path int true "活動ID"
+// @Success 200 {object} models.Event
+// @Router /events/{id} [get]
 func getEvent(context *gin.Context) {
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) // 轉成 int64
 	if err != nil {
@@ -50,8 +55,11 @@ func getEvent(context *gin.Context) {
 	context.JSON(http.StatusOK, event)
 }
 
-// 創造活動
-// 需要權限才能使用，所以需要加入驗證 token
+// @Summary 創造活動
+// @Security Bearer
+// @Param event body models.Event true "活動資訊"
+// @Success 201 {object} map[string]interface{}
+// @Router /events [post]
 func createEvents(context *gin.Context) {
 
 	// 宣告一個「空的 Event 容器」，型別是 models.Event，也就是 struct，
@@ -83,7 +91,12 @@ func createEvents(context *gin.Context) {
 	context.JSON(http.StatusCreated, gin.H{"message": "事件被創造", "event": event})
 }
 
-// 更新
+// @Summary 更新活動
+// @Security Bearer
+// @Param id path int true "活動ID"
+// @Param event body models.Event true "活動資訊"
+// @Success 200 {object} map[string]interface{}
+// @Router /events/{id} [put]
 func updateEvent(context *gin.Context) {
 	// 先檢查 ID 存不存在
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 
@@ -135,7 +148,11 @@ func updateEvent(context *gin.Context) {
 
 }
 
-// 刪除
+// @Summary 刪除活動
+// @Security Bearer
+// @Param id path int true "活動ID"
+// @Success 200 {object} map[string]interface{}
+// @Router /events/{id} [delete]
 func deleteEvent(context *gin.Context) {
 	// 先檢查 ID 存不存在
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 

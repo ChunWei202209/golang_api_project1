@@ -9,7 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 創造使用者
+// @Summary 使用者註冊
+// @Param user body models.User true "使用者資訊"
+// @Success 201 {object} map[string]interface{}
+// @Router /signup [post]
 func signup(context *gin.Context) {
 	var user models.User
 
@@ -36,7 +39,10 @@ func signup(context *gin.Context) {
 	context.JSON(http.StatusCreated, gin.H{"message": "事件被創造", "user": user})
 }
 
-// 登錄
+// @Summary 使用者登錄
+// @Param user body models.User true "登錄資訊"
+// @Success 200 {object} map[string]interface{}
+// @Router /login [post]
 func login(context *gin.Context) {
 	var user models.User
 

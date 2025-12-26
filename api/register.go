@@ -9,6 +9,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary 報名活動
+// @Security Bearer
+// @Param id path int true "活動ID"
+// @Success 201 {object} map[string]interface{}
+// @Router /events/{id}/register [post]
 func registerForEvent(context *gin.Context) {
 	userId := context.GetInt64("userId")
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 
@@ -36,6 +41,11 @@ func registerForEvent(context *gin.Context) {
 
 }
 
+// @Summary 取消報名
+// @Security Bearer
+// @Param id path int true "活動ID"
+// @Success 200 {object} map[string]interface{}
+// @Router /events/{id}/register [delete]
 func cancelRegistration(context *gin.Context) {
 	userId := context.GetInt64("userId")
 	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64) 

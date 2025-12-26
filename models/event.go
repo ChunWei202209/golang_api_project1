@@ -19,14 +19,13 @@ import (
 	"example.com/golang-api-project1/internal/db"
 )
 
-// 資料的藍圖
 type Event struct {
-	ID 					int64  `json:"id"`
-	Name 				string `binding:"required"` // 「前端送 JSON 時，這個欄位一定要有」
-	Description string `binding:"required"`
-	Location 		string `binding:"required"`
-	DateTime 		time.Time `binding:"required"`
-	UserID 			int64
+	ID          int64     `json:"id"`
+	Name        string    `json:"name" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Location    string    `json:"location" binding:"required"`
+	DateTime    time.Time `json:"dateTime" binding:"required"`
+	UserID      int64     `json:"userId"`
 }
 
 // 把 Event 存進資料庫，使用指標來修改 ID

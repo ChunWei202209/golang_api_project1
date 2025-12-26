@@ -1,4 +1,4 @@
-.PHONY: run build clean
+.PHONY: run build clean swagger deps
 
 # 執行應用程式
 run:
@@ -12,6 +12,10 @@ build:
 clean:
 	rm -f bin/golang-api-project1.exe
 	rm -f bin/golang-api-project1
+
+# 生成 Swagger 文檔
+swagger:
+	swag init -g cmd/api/main.go -o docs
 
 # 安裝依賴
 deps:

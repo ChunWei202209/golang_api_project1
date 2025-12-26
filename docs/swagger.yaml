@@ -1,0 +1,190 @@
+basePath: /
+definitions:
+  models.Event:
+    properties:
+      dateTime:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      userId:
+        type: integer
+    required:
+    - dateTime
+    - description
+    - location
+    - name
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Golang API Project
+  version: "1.0"
+paths:
+  /events:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Event'
+            type: array
+      summary: 取得所有活動
+    post:
+      parameters:
+      - description: 活動資訊
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/models.Event'
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: 創造活動
+  /events/{id}:
+    delete:
+      parameters:
+      - description: 活動ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: 刪除活動
+    get:
+      parameters:
+      - description: 活動ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Event'
+      summary: 取得單一活動
+    put:
+      parameters:
+      - description: 活動ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: 活動資訊
+        in: body
+        name: event
+        required: true
+        schema:
+          $ref: '#/definitions/models.Event'
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: 更新活動
+  /events/{id}/register:
+    delete:
+      parameters:
+      - description: 活動ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: 取消報名
+    post:
+      parameters:
+      - description: 活動ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - Bearer: []
+      summary: 報名活動
+  /login:
+    post:
+      parameters:
+      - description: 登錄資訊
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+      summary: 使用者登錄
+  /signup:
+    post:
+      parameters:
+      - description: 使用者資訊
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+      summary: 使用者註冊
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
