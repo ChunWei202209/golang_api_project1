@@ -91,19 +91,19 @@ docs/        # Swagger 文檔（自動生成）
 
 ## 參考文件與學習資源
 
-**Uber-zap：**
+### Uber-zap：
 - [Zap 完整教學筆記 - PJCHENder 的繁體中文實戰指南](https://pjchender.dev/golang/pkg-zap/)
 - [Go Logging Guide with Zap - 深入探討 Zap 配置與最佳實務](https://betterstack.com/community/guides/logging/go/zap/)
 
-**Swagger：**
+### Swagger：
 - [fmt.Println("從零開始的Golang生活")系列 第 19 篇](https://ithelp.ithome.com.tw/articles/10277455?sc=iThomeR)
 - [GO 使用Gin和Swagger設定自動產生文件檔案](https://hackmd.io/@fLqVWb1tQxmEVn9x8EpToQ/HyCV15w9T)
 - [下班加減學點Golang與Docker系列 第 27 篇](https://ithelp.ithome.com.tw/articles/10224472)
 
-**> 快速整合四步驟：**
-  1. 安裝工具：環境需安裝 swag 指令。
-  2. 標註說明：在 main 和 controller 寫下該 API 的輸入與輸出規範。
-  3. 生成文件：執行 swag init，這會自動產出一個 docs 資料夾。
-  4. 掛載路由：在路由代碼中匯入 docs 套件，並設定 r.GET("/swagger/*any", ...) 讓瀏覽器能看到文件介面。
+**快速整合四步驟：**
+1. 安裝工具：環境需安裝 swag 指令。
+2. 標註說明：在 main 和 controller 寫下該 API 的輸入與輸出規範。
+3. 生成文件：執行 swag init，這會自動產出一個 docs 資料夾。
+4. 掛載路由：在路由代碼中匯入 docs 套件，並設定 r.GET("/swagger/*any", ...) 讓瀏覽器能看到文件介面。
 
 
