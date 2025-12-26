@@ -20,7 +20,7 @@ import (
 // @in header
 // @name Authorization
 func main() {
-	logger.InitLogger(true)
+	logger.InitLogger()
 	defer logger.Sync()
 
 	db.InitDB()

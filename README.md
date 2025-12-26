@@ -89,5 +89,12 @@ internal/    # 內部套件（db, logger, middleware 等）
 docs/        # Swagger 文檔（自動生成）
 ```
 
+## 常用指令
+
+**Uber-zap：**
+- [text](https://pjchender.dev/golang/pkg-zap/)
+- [text](https://betterstack.com/community/guides/logging/go/zap/)
+
+
 大概就這樣吧。
 
