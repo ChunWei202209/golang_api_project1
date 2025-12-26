@@ -25,6 +25,12 @@ func signup(context *gin.Context) {
 		return
 	}
 
+	// 檢查密碼長度
+	if len(user.Password) < 6 {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "密碼至少要六位數"})
+		return
+	}
+
 	err = user.Save()
 
 	if err != nil {

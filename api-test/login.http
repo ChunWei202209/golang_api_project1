@@ -4,5 +4,5 @@ authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhaXBlaUBleGFt
 
 {
   "email": "taipei@example.com",
-  "password": "123"
+  "password": "123456"
 }

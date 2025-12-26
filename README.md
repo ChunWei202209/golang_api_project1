@@ -45,6 +45,12 @@ swag init -g cmd/api/main.go -o docs
 docker-compose up
 ```
 
+### 測試
+用 testify：
+```bash
+go test ./...
+```
+
 ## API 文檔
 
 啟動後到這裡看 Swagger：
@@ -77,7 +83,7 @@ http://localhost:8080/swagger/index.html
 
 ```
 cmd/api/     # 主程式
-api/         # API 路由
+api/         # API 路由、測試
 models/      # 資料模型
 internal/    # 內部套件（db, logger, middleware 等）
 docs/        # Swagger 文檔（自動生成）
