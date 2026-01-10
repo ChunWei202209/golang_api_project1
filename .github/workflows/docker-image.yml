@@ -17,4 +17,4 @@ jobs:
 
     # 模擬部署前的檢查：確保 Dockerfile 在雲端環境也能成功 Build
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build -t test-build .
