@@ -23,16 +23,6 @@ go run cmd/api/main.go
 go run cmd/api/main.go
 ```
 
-### 編譯
-```bash
-go build -o bin/app.exe cmd/api/main.go
-```
-
-編譯好的話：
-```bash
-./bin/app.exe
-```
-
 ### 更新 Swagger 文檔
 改了 API 註解記得要重新生成：
 ```bash
@@ -71,7 +61,7 @@ http://localhost:8080/swagger/index.html
 
 ## 資料庫
 
-預設用 SQLite，會自動建立 `api.db`。可以用環境變數 `DB_PATH` 改路徑。
+預設用 SQLite
 
 ## 專案結構
 
