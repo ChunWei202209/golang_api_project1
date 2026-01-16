@@ -1,24 +1,25 @@
 package db
 
 import (
-  "database/sql"
+	"database/sql"
 	"os"
+
 	"example.com/golang-api-project1/internal/logger"
-  _ "github.com/glebarez/sqlite"
+	_ "github.com/glebarez/sqlite"
 )
 
 var DB *sql.DB
- 
-func InitDB() {
-  // 2. 優先讀取環境變數 DB_PATH，如果沒設定，就用原本的 "api.db"
-	dbPath := os.Getenv("DB_PATH")
-	if dbPath == "" {
-		dbPath = "api.db"
-	}
 
+func InitDB() {
+	// 資料庫檔案統一放在 data/api.db
+	dbPath := "data/api.db"
+
+	// 如果 data 資料夾不存在就建立
+	os.MkdirAll("data", 0755)
+
+	// 連接資料庫
 	var err error
 	DB, err = sql.Open("sqlite", dbPath)
-
 	if err != nil {
 		logger.Log.Fatal("無法連到 DB 資料庫", logger.ErrorField(err))
 		panic("無法連到 DB 資料庫。" + err.Error())
@@ -30,7 +31,6 @@ func InitDB() {
 	createTables()
 }
 
-// 這是一個初始化用的函式，通常只在程式啟動時呼叫一次
 func createTables() {
 
 	createUsersTable := `
