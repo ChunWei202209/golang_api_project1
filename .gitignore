@@ -1,40 +1,7 @@
-# Binaries
-bin/
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary
-*.test
-
-# Output of the go coverage tool
-*.out
-
-# Go workspace file
-go.work
-
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Database
+# 資料庫檔案
 *.db
 *.sqlite
 *.sqlite3
 
-# Logs
+# 日誌檔案
 *.log
-
-
-
-
-
