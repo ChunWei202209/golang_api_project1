@@ -16,7 +16,7 @@ import (
 // 2️⃣ 定義資料怎麼進 DB（Save / Update）。
 // 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID）。
 
-// 一句話結論（給新手用的版本）
+// 一句話結論
 // 有 SELECT → 一定要 Scan
 // 沒有 SELECT → 用 Exec，不 Scan
 // Scan = 把 DB 的欄位值寫進 Go 變數

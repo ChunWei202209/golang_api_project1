@@ -24,6 +24,7 @@ func main() {
 	defer logger.Sync()
 
 	db.InitDB()
+	// Default() 建立一個「已經幫你準備好基本安全與記錄功能」的 Web 伺服器
 	server := gin.Default()
 	api.RegisterRoutes(server)
 

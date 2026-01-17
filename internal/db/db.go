@@ -1,5 +1,17 @@
 package db
 
+// DB Package：
+// 負責初始化資料庫、建立資料表，並提供全域 DB 連線給程式使用。
+
+// 做三件事：
+// 1️⃣ 管理資料庫檔案（路徑、資料夾、連線）
+// 2️⃣ 初始化資料表（CREATE TABLE IF NOT EXISTS）
+// 3️⃣ 提供全域變數 DB，讓其他 package 可以操作資料庫
+
+// 使用規範：
+// - 所有資料操作請透過 DB 物件進行
+// - Exec 用於建表、修改資料；Query 用於查詢
+
 import (
 	"database/sql"
 	"os"
@@ -24,7 +36,7 @@ func InitDB() {
 		logger.Log.Fatal("無法連到 DB 資料庫", logger.ErrorField(err))
 		panic("無法連到 DB 資料庫。" + err.Error())
 	}
-
+	// 管理連線池
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(5)
 
@@ -40,6 +52,7 @@ func createTables() {
 			password TEXT NOT NULL
 		)
 	`
+	// Exec 是 執行一段 SQL 指令，但不會回傳查詢結果
 	_, err := DB.Exec(createUsersTable)
 
 	if err != nil {
@@ -58,6 +71,7 @@ func createTables() {
 			FOREIGN KEY(user_id) REFERENCES users(id)
 		)
 	`
+	// Exec 是 執行一段 SQL 指令，但不會回傳查詢結果
 	_, err = DB.Exec(createEventsTable)
 
 	if err != nil {
@@ -74,6 +88,7 @@ func createTables() {
 			FOREIGN KEY(user_id) REFERENCES users(id)
 		)
 	`
+	// Exec 是 執行一段 SQL 指令，但不會回傳查詢結果
 	_, err = DB.Exec(createRegistrationsTable)
 
 	if err != nil {

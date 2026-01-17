@@ -8,7 +8,10 @@ package models
 // 2️⃣ 定義資料怎麼進 DB（Save / Update）。
 // 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID）。
 
-// 一句話結論（給新手用的版本）
+// 一句話結論
+// - DB.Prepare(...) 適合同一條 SQL 需要重複執行（多筆資料或多次 request）
+// - DB.Exec(...)  適合單次執行 SQL，用於建表、修改資料；
+// - DB.Query(...)  用於查詢，因為會回傳資料；
 // 有 SELECT → 一定要 Scan
 // 沒有 SELECT → 用 Exec，不 Scan
 // Scan = 把 DB 的欄位值寫進 Go 變數
@@ -133,7 +136,7 @@ func GetEventByID(id int64) (*Event, error) {
 		return &event, nil
 }
 
-// 更新 - 👉 改「內容」 → struct 是內容集合
+// 更新 - 改「內容」 → struct 是內容集合
 func (event Event) Update() error {
 	query := `
 		UPDATE events
@@ -158,7 +161,7 @@ func (event Event) Update() error {
 	return err
 }
 
-// 刪除 - 👉 刪「存在本身」 → ID 就夠了
+// 刪除 - 刪「存在本身」 → ID 就夠了
 func (event Event) Delete() error {
 	query := "DELETE FROM events WHERE id = ?"
 	stmt, err := db.DB.Prepare(query)
