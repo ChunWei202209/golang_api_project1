@@ -10,6 +10,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.GET("/events/:id", getEvent)
 
 	// 建立一個「路由群組」，方便統一加 middleware 或共用設定
+	// :id 代表 "URL 裡的變數"
 	authenticated := server.Group("/")
 	authenticated.Use(middlewares.Authenticate)
 	authenticated.POST("/events", createEvents)

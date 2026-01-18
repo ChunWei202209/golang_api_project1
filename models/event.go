@@ -6,15 +6,33 @@ package models
 // 做三件事：
 // 1️⃣ 定義資料長什麼樣（struct）。
 // 2️⃣ 定義資料怎麼進 DB（Save / Update）。
-// 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID）。
+// 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID），需要使用地址寫入。
 
-// 一句話結論
-// - DB.Prepare(...) 適合同一條 SQL 需要重複執行（多筆資料或多次 request）
+// 執行步驟：
+// 1. 將 SQL 指令存進變數
+// 2. 根據用途選擇合適的方法呼叫 DB：
+//    - Exec → 不需要回傳資料，只送資料給 DB（INSERT/UPDATE/DELETE）
+//    - Query → 可能回傳多筆資料，需用 Rows.Next() 讀取
+//    - QueryRow → 只回傳一筆資料
+// 3. 若回傳的是 *Rows，使用完一定要 defer rows.Close()；QueryRow/Exec 不需要 Close
+// 4. 若需要把 DB 回傳的資料寫進 Go 變數（struct 或其他），使用 Scan 並傳地址；否則不用 Scan
+// 	1) 宣告一個變數（例如 struct 或普通變數），準備裝資料
+// 	2) 使用 `Scan(&var1, &var2, ...)`，把每個欄位寫進對應變數
+//    - **注意**：Scan 需要位址（`&`），因為它要把資料寫進變數
+//    - 方向：DB → Go 記憶體
+// 5. 回傳必要資料或錯誤
+
+// 方法解釋：
+// - DB.Prepare(...) 適合同一條 SQL 需要重複執行（多筆資料或多次 request）;
 // - DB.Exec(...)  適合單次執行 SQL，用於建表、修改資料；
-// - DB.Query(...)  用於查詢，因為會回傳資料；
-// 有 SELECT → 一定要 Scan
-// 沒有 SELECT → 用 Exec，不 Scan
-// Scan = 把 DB 的欄位值寫進 Go 變數
+// - DB.QueryRow(...)  用於查詢一筆資料；
+// - DB.Query(...)  用於查詢多筆資料。不需要呼叫 Close()，因為 QueryRow 內部已經幫你管理了連線與資源;
+
+// 地址說明：
+// Scan 是「寫 Go 變數」的工具
+// Exec 是「只把資料送進 DB」的工具
+// 有把「DB 回傳的值」寫進 Go struct → 一定要 Scan，而且要傳地址
+// 沒有把值寫回 Go 變數 → 用 Exec，不用 Scan
 
 import (
 	"time"
@@ -87,10 +105,10 @@ func GetAllEvents() ([]Event, error) {
 
 	// 迴圈來讀取每一行資料
 	for rows.Next() {
-		var event Event // 幫我生一個 全新的 Event 變數
+		var event Event // 幫我生一個 全新的 Event 變數 來裝回傳值
 		
 		// 資料庫這一列的每一個欄位，
-		// 請你直接寫進這個 event 裡對應的欄位。
+		// 直接寫進這個 event 裡對應的 struct 欄位。
 		// Scan 要的是「位址」
 		if err := rows.Scan(
 			&event.ID,
@@ -119,7 +137,12 @@ func GetEventByID(id int64) (*Event, error) {
 	query := "SELECT * FROM events WHERE ID = ?"
 	row := db.DB.QueryRow(query, id)
 
-	var event Event
+	var event Event // 幫我生一個 全新的 Event 變數 來裝回傳值
+
+	// 資料庫這一列的每一個欄位，
+	// 直接寫進這個 event 裡對應的 struct 欄位。
+	// Scan 要的是「位址」
+	
 	err := row.Scan(
 			&event.ID,
 			&event.Name,

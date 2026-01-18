@@ -1,5 +1,13 @@
 package models
 
+// Models：
+// 跟資料庫溝通，存資料、拿資料、更新資料。
+
+// 做三件事：
+// 1️⃣ 定義資料長什麼樣（struct）。
+// 2️⃣ 定義資料怎麼進 DB（Save / Update）。
+// 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID），需要使用地址寫入。
+
 import (
 	"errors"
 	"fmt"
@@ -7,19 +15,6 @@ import (
 	"example.com/golang-api-project1/internal/db"
 	"example.com/golang-api-project1/internal/utils"
 )
-
-// Models：
-// 跟資料庫溝通，存資料、拿資料、更新資料。
-
-// 做三件事：
-// 1️⃣ 定義資料長什麼樣（struct）。
-// 2️⃣ 定義資料怎麼進 DB（Save / Update）。
-// 3️⃣ 定義資料怎麼出 DB（GetAll / GetByID）。
-
-// 一句話結論
-// 有 SELECT → 一定要 Scan
-// 沒有 SELECT → 用 Exec，不 Scan
-// Scan = 把 DB 的欄位值寫進 Go 變數
 
 type User struct {
 	ID       int64  `json:"id"`
