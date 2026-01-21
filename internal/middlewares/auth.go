@@ -1,5 +1,7 @@
 package middlewares
 
+// 這個檔案負責「身分驗證」相關的 middleware。
+
 import (
 	"net/http"
 
@@ -9,7 +11,7 @@ import (
 )
 
 func Authenticate(context *gin.Context) {
-	// 驗證
+	// 從 HTTP Header 讀取 Authorization token
 	token := context.Request.Header.Get("Authorization")
 
 	if token == "" {
@@ -25,6 +27,11 @@ func Authenticate(context *gin.Context) {
 		return
 	}
 
+	// 將已驗證的 userId 存入 gin.Context，
+	// 讓後續的 handler 可以直接取得目前登入的使用者
 	context.Set("userId", userId)
+
+	// middleware 工作完成，放行請求，
+	// 繼續執行下一個 middleware 或 handler
 	context.Next()
 }
