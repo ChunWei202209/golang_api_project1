@@ -27,6 +27,6 @@ jobs:
       # 3. 編譯並推送 Docker 鏡像
       - name: Build and push Docker image
         run: |
-          IMAGE_URI=837171932343.dkr.ecr.ap-northeast-1.amazonaws.com/project1/golang-api:latest
+          IMAGE_URI=837171932343.dkr.ecr.ap-northeast-1.amazonaws.com/golang_api_project1:latest
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
