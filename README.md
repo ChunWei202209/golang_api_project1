@@ -99,6 +99,10 @@ docs/        # Swagger 文檔（自動生成）
 - [GO 使用Gin和Swagger設定自動產生文件檔案](https://hackmd.io/@fLqVWb1tQxmEVn9x8EpToQ/HyCV15w9T)
 - [下班加減學點Golang與Docker系列 第 27 篇](https://ithelp.ithome.com.tw/articles/10224472)
 
+### AWS App Runner：
+- [Day 2 Docker image 推上 ECR](https://ithelp.ithome.com.tw/articles/10317384)
+- [App Runner 入門](https://docs.aws.amazon.com/zh_tw/apprunner/latest/dg/getting-started.html)
+
 ## 未來優化計畫
 1. 增加單元測試
 2. 加入真正的資料庫
