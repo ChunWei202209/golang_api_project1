@@ -1,6 +1,6 @@
 # Golang API Project
 
-一個用 Gin 寫的簡單 API，主要功能是管理活動和用戶註冊。
+一個使用 Gin 框架實作的 RESTful API，主要功能為活動管理與使用者報名系統。專案整合 Swagger 自動生成 API 文件，並透過 GitHub Actions 建立 CI 流程，部署於 AWS App Runner，實現自動化建置與雲端運行。
 
 ## 快速開始
 
