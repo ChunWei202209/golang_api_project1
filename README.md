@@ -1,4 +1,4 @@
-# Golang API Project
+# 活動管理與報名系統（Golang API Project）
 
 一個使用 Gin 框架實作的 RESTful API，主要功能為活動管理與使用者報名系統。專案整合 Swagger 自動生成 API 文件，並透過 GitHub Actions 建立 CI 流程，部署於 AWS App Runner，實現自動化建置與雲端運行。
 
